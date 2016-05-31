@@ -4,3 +4,4 @@ src/main/resources/node_modules/*
 .idea
 *.js
 *.js.map
+npm-debug.log

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class HeroService {
 
-    private heroesUrl = "hero";
+    private heroesUrl = "heroes";
 
     constructor(private http:Http){}
 
@@ -17,7 +17,7 @@ export class HeroService {
     }
 
     getHeroesSlowly (): Promise<Hero[]> {
-        let url = "/${this.heroesUrl}/getHeroes";
+        let url = `/${this.heroesUrl}/getAll`;
         return this.http.get(url)
             .toPromise()
             .then(this.extractData)
@@ -25,11 +25,16 @@ export class HeroService {
     }
 
     getHero(id:number) {
-        return Promise.resolve(HEROES).then(heroes => heroes.filter(hero => hero.id === id)[0]);
+        let url = `/${this.heroesUrl}/getById/${id}`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+        // return Promise.resolve(HEROES).then(heroes => heroes.filter(hero => hero.id === id)[0]);
     }
 
     saveHero(hero:Hero): Promise<Hero> {
-        if(hero.id) {
+        if(hero && hero.id) {
             return this.put(hero);
         } else {
             Promise.reject('No hero passed');
@@ -38,7 +43,6 @@ export class HeroService {
 
     private extractData(response: Response) {
         let data = response.json();
-        console.log('data:'+data);
         return data || {};
     }
 
@@ -50,7 +54,7 @@ export class HeroService {
     }
 
     private put(hero:Hero): Promise<Hero> {
-        let url = "/${this.heroesUrl}/${hero.id}";
+        let url = `/${this.heroesUrl}/save/${hero.id}`;
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
         return this.http.put(url, JSON.stringify(hero), {headers: headers})

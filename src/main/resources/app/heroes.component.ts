@@ -18,6 +18,9 @@ import {HeroService} from "./hero.service";
             <span class="badge">{{hero.id}}</span> {{hero.name}}
         </li>
     </ul>
+    <div *ngIf="saveHero">
+        <my-hero-detail (close)="close($event)"></my-hero-detail>
+    </div>
     <div *ngIf="selectedHero">
         {{selectedHero.name | uppercase}} is my hero
         <button (click)="gotoDetail()">View Details</button>
@@ -37,6 +40,7 @@ export class HeroesComponent implements OnInit {
     // };
     selectedHero: Hero;
     heroes : Hero[];
+    saveHero = false;
 
     onSelect(hero: Hero) {
         this.selectedHero = hero;
@@ -48,6 +52,11 @@ export class HeroesComponent implements OnInit {
 
     gotoDetail() {
         let link = ['HeroDetail', {id: this.selectedHero.id}];
+        this.saveHero = true;
         this.router.navigate(link);
+    }
+
+    close(savedHero: Hero) {
+        console.log("Saved Hero:"+savedHero);
     }
 }

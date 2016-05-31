@@ -26,4 +26,10 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(link);
     }
 
+    captureSavedHero(event) {
+        console.log('Event:'+event);
+    }
+
+    savedHero: Hero;
+
 }
